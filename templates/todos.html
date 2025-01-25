@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Todo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-color: #f9f9f9;
+            padding: 2%;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            background: #fff;
+            margin-bottom: 2%;
+            border-radius: 10px;
+            padding: 15px;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            background: #f1f1f1;
+        }
+
+        .submit_form {
+            text-align: center;
+            padding: 15px;
+            background: #007bff;
+            color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .submit_form button {
+            background: #0056b3;
+            color: #fff;
+            border: none;
+        }
+
+        .submit_form button:hover {
+            background: #004494;
+        }
+
+        .todo-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .todo-actions a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .btn-edit {
+            background-color: #ffc107;
+            color: #fff;
+        }
+
+        .btn-edit:hover {
+            background-color: #e0a800;
+        }
+    </style>
+</head>
+
+<body class="container-fluid">
+
+<center>
+    <h1><i>Kundalik Ishlar</i></h1>
+
+    <hr/>
+    <a href="/logout"><i>Logout</i></a>
+</center>
+
+<div class="row">
+
+    <!-- Todo List Section -->
+    <div class="col-md-8">
+        {% for task in tasks %}
+        <div class="card">
+            <center><b>{{ task.title }}</b></center>
+            <hr/>
+            <p><b>Vaqt:</b> {{ task.time }}</p>
+            <hr/>
+            <p><b>Tavsif:</b>{{ task.description }}</p>
+            <hr/>
+            <p><b>Status:</b>{{ task.status }}</p>
+            <div class="todo-actions">
+                <form action="/del_task/{{ task.id }}" method="POST">
+                    <button class="btn btn-danger" type="submit">
+                        <span class="glyphicon glyphicon-trash"></span> O'chirish
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Form Section -->
+    <div class="col-md-4">
+        <div class="submit_form">
+            <h3>Yangi Vazifa Qo'shish</h3>
+            <form action="/add_task" method="POST">
+                <div class="form-group">
+                    <input type="text" name="title" class="form-control" placeholder="Vazifa nomi" required>
+                </div>
+                <div class="form-group">
+                    <input type="datetime-local" name="time" class="form-control" placeholder="Vaqt" required>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" name="description" rows="3" placeholder="Vazifa tavsifi"
+                              required></textarea>
+                </div>
+                <button type="submit" class="btn btn-default">Qo'shish</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</body>
+
+</html>
