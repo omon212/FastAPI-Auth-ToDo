@@ -7,5 +7,5 @@ static = StaticFiles(directory="static")
 
 class BaseService:
 
-    def __init__(self,request):
+    def __init__(self, request):
         self.request = request

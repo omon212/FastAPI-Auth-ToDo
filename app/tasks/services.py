@@ -4,12 +4,13 @@ from fastapi.responses import RedirectResponse
 
 
 class TaskService(BaseService):
-
     async def read_task(self, request):
         user = request.session.get("user")
         if not user:
             return RedirectResponse(url="/login", status_code=303)
-        tasks = db["tasks"]
+        tasks = db.get(user).get("tasks")
+        if not tasks:
+            tasks = []
         return templates.TemplateResponse(
             "todos.html",
             {
@@ -23,7 +24,7 @@ class TaskService(BaseService):
         if not user:
             return RedirectResponse(url="/login", status_code=303)
         task = await self.request.form()
-        new_id = len(db["tasks"]) + 1
+        new_id = len(db[user]["tasks"]) + 1
         new_task = {
             "id": new_id,
             "title": task["title"],
@@ -31,13 +32,13 @@ class TaskService(BaseService):
             "description": task["description"],
             "status": "Bajarilmagan"
         }
-        db["tasks"].append(new_task)
+        db[user]["tasks"].append(new_task)
         return RedirectResponse("/tasks", status_code=303)
 
-    async def del_task(self,request ,pk: int):
+    async def del_task(self, request, pk: int):
         user = request.session.get("user")
         if not user:
             return RedirectResponse(url="/login", status_code=303)
-        user = request.session.get("user")
-        db['tasks'] = [task for task in db['tasks'] if task['id'] != pk]
+        tasks = db.get(user, {}).get("tasks", [])
+        db[user]["tasks"] = [task for task in tasks if task.get("id") != pk]
         return RedirectResponse(url="/tasks", status_code=303)

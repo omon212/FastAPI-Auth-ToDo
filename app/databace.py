@@ -1,18 +1,24 @@
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+async def verify_pass(plain_pass: str, hashed_pass: str):
+    return pwd_context.verify(plain_pass, hashed_pass)
+
+
+async def auth_user(username: str, password: str):
+    user = db.get(username)
+    if not user:
+        return None
+    if not await verify_pass(password, user["password"]):
+        return None
+    return user
+
+
 db = {
-    "tasks": [
-        {
-            "id": 1,
-            "title": "Vazifa nomi",
-            "time": "10:00 AM, 22-Jan-2025",
-            "description": "Bu vazifaning tavsifi",
-            "status": "Bajarilmagan"
-        },
-        {
-            "id": 2,
-            "title": "Vazifa nomi",
-            "time": "9:00 AM, 22-Jan-2024",
-            "description": "Bu vazifaning tavsifi",
-            "status": "Bajarilmagan"
-        }
-    ]
+    "omon212": {
+        "username": "omon212",
+        "password": pwd_context.hash("omonullo66"),
+    }
 }
