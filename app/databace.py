@@ -31,9 +31,6 @@ class Tasks(Base):
     user: Mapped["User"] = relationship("User", back_populates="tasks")
 
 
-Base.metadata.create_all(bind=engine)
-
-
 def get_db():
     db = SessionLocal()
     try:

@@ -33,7 +33,7 @@ async def add_task(
     return RedirectResponse(url="/tasks", status_code=303)
 
 
-@tasks_router.delete("/del_task/{pk}")
+@tasks_router.post("/del_task/{pk}")
 async def delete_task(pk: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if not current_user:
         return RedirectResponse(url="/login", status_code=303)
